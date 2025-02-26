@@ -1,10 +1,23 @@
-namespace IiaTddTest;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using IiaTdd.routes; // Assure-toi d'importer ton namespace
+using System;
 
-[TestClass]
-public class UnitTest1
+namespace IiaTddTest
 {
-    [TestMethod]
-    public void TestMethod1()
+    [TestClass]
+    public class UnitTest1
     {
+        [TestMethod]
+        public void TestMethod1()
+        {
+           
+            var controller = new TestController();
+
+        
+            bool result = controller.Get();
+
+       
+            Assert.IsTrue(result);
+        }
     }
 }
