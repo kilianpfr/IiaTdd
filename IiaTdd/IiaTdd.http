@@ -1,6 +1,0 @@
-@IiaTdd_HostAddress = http://localhost:5291
-
-GET {{IiaTdd_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
