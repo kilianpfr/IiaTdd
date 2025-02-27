@@ -11,9 +11,9 @@ public class DeleteBook
         _repository = repository  ?? throw new ArgumentNullException(nameof(repository));
     }
     
-    public bool DeleteBookIsbn(int id)
+    public bool DeleteBookIdRep(int id)
     {
-        _repository.DeleteBookByIsbn(id);
+        _repository.DeleteBookById(id);
         return true;
     }
 }

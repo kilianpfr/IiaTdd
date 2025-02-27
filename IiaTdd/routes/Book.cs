@@ -78,7 +78,7 @@ public class BookController : ControllerBase
     {
         if (id == 0) return BadRequest();
         var delete = new DeleteBook(_repository);
-        var result = delete.DeleteBookIsbn(id);
+        var result = delete.DeleteBookIdRep(id);
         if (result) return Ok();
         return BadRequest();
     }

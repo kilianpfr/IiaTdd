@@ -1,4 +1,5 @@
 ﻿using IiaTdd.cs.Interface;
+using IiaTdd.cs.Isbn;
 using IiaTdd.objet;
 
 namespace IiaTddTest.Fake;
@@ -67,7 +68,7 @@ public class FakeBookRepository : IBookRepository
 
         return book;
     }
-    public bool DeleteBookByIsbn(int id)
+    public bool DeleteBookById(int id)
     {
         try
         {
@@ -78,6 +79,29 @@ public class FakeBookRepository : IBookRepository
             }
             _books.Remove(book);
             return true;
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Aucun livre trouvé");
+        }
+    }
+    public void UpdateBookById(int id, PostBook book)
+    {
+        try
+        {
+            
+          
+            
+            var bookToUpdate = _books.FirstOrDefault(x => x.Id == id);
+            if (bookToUpdate == null)
+            {
+                throw new Exception("Aucun livre trouvé");
+            }
+            bookToUpdate.Isbn = book.Isbn;
+            bookToUpdate.Title = book.Title;
+            bookToUpdate.Author = book.Author;
+            bookToUpdate.Editor = book.Editor;
+            bookToUpdate.Format = book.Format;
         }
         catch (Exception e)
         {

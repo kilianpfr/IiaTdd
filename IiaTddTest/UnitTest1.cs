@@ -184,7 +184,7 @@ namespace IiaTddTest
             IBookRepository fakeRepo = new FakeBookRepository();
             var bookService = new BookWIthNullData(fakeRepo);
             var delete = new DeleteBook(fakeRepo);
-            var result = delete.DeleteBookIsbn(Id);
+            var result = delete.DeleteBookIdRep(Id);
             Assert.IsTrue(result);
         }
         [DataTestMethod]
@@ -195,8 +195,33 @@ namespace IiaTddTest
             IBookRepository fakeRepo = new FakeBookRepository();
             var bookService = new BookWIthNullData(fakeRepo);
             var delete = new DeleteBook(fakeRepo);
-            delete.DeleteBookIsbn(id);
+            delete.DeleteBookIdRep(id);
         }
+        [DataTestMethod]
+        [DataRow(1, "1234567890", "Le seigneur des anneaux", "Tolkien", "gJNKDqskjfq", "Christian Bourgois", 0)]
+        [DataRow(2, "9781987654321", "Le mystère du passé", "EAZEAZ", "Jean", "Flammarion", 1)]
+        [DataRow(3, "9783135792468", "Temps dans le voyage", "Curie", "Marie", "Le Seuil", 2)]
+        public void UpdateBook_ShouldReturnTrue(int id, string isbn, string title, string authorName, string authorFirstName, string editor, int format)
+        {
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new BookWIthNullData(fakeRepo);
+            var update = new UpdateBook(fakeRepo);
+            var book = new PostBook()
+            {
+                Isbn = isbn,
+                Title = title,
+                Author = new Author
+                {
+                    Name = authorName,
+                    FirstName = authorFirstName
+                },
+                Editor = editor,
+                Format = (FormatEnum)format
+            };
+            var result = update.UpdateBookIdRep(id, book);
+            Assert.IsTrue(result);
+        }
+        
         
     }
     
