@@ -2,7 +2,7 @@
 
 public class CheckAuthor
 {
-    public static void CheckAuthorName(objet.Author authorName)
+    public static void CheckAuthorName(objet.Author? authorName)
     {
         //si il y as des chiffres dans le nom de l'auteur
         if (authorName.Name != null && authorName.Name.Any(char.IsDigit) || authorName.FirstName != null && authorName.FirstName.Any(char.IsDigit))
