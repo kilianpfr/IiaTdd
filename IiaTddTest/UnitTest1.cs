@@ -222,6 +222,30 @@ namespace IiaTddTest
             Assert.IsTrue(result);
         }
         
+        [DataTestMethod]
+        [DataRow(4, "1234567890", "Le seigneur des anneaux", "Tolkien", "J.R.R", "Christian Bourgois", 0)]
+        [ExpectedException(typeof(Exception), "Aucun livre trouvé")]
+        public void UpdateBook_ShouldThrowException_WhenBookNotFound(int id, string isbn, string title, string authorName, string authorFirstName, string editor, int format)
+        {
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new BookWIthNullData(fakeRepo);
+            var update = new UpdateBook(fakeRepo);
+            var book = new PostBook()
+            {
+                Isbn = isbn,
+                Title = title,
+                Author = new Author
+                {
+                    Name = authorName,
+                    FirstName = authorFirstName
+                },
+                Editor = editor,
+                Format = (FormatEnum)format
+            };
+            update.UpdateBookIdRep(id, book);
+        }
+        
+        
         
     }
     

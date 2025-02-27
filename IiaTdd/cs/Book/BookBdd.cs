@@ -4,11 +4,11 @@ using MySql.Data.MySqlClient;
 
 namespace IiaTdd.cs.Book;
 
-public class BookRepository : IBookRepository
+public class BookBdd : IBookRepository
 {
     private readonly IConfiguration _configuration;
 
-    public BookRepository(IConfiguration configuration)
+    public BookBdd(IConfiguration configuration)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
