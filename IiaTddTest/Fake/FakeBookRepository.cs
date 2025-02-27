@@ -38,7 +38,7 @@ public class FakeBookRepository : IBookRepository
         }
             
     };
-    public PostBook? GetBookByISBN(string isbn)
+    public PostBook GetBookByISBN(string isbn)
     {
         
         PostBook? book;
@@ -55,5 +55,22 @@ public class FakeBookRepository : IBookRepository
         }
 
         return book;
+    }
+    public bool DeleteBookIsbn(string isbn)
+    {
+        try
+        {
+            var book = _books.FirstOrDefault(x => x.Isbn == isbn);
+            if (book == null)
+            {
+                throw new Exception("Aucun livre trouvé");
+            }
+            _books.Remove(book);
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Aucun livre trouvé");
+        }
     }
 }

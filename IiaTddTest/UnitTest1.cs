@@ -183,6 +183,17 @@ namespace IiaTddTest
             var result = delete.DeleteBookIsbn(isbn);
             Assert.IsTrue(result);
         }
+        [DataTestMethod]
+        [DataRow("2266111566")]
+        [ExpectedException(typeof(Exception), "Aucun livre trouvé")]
+        public void DeleteBook_ShouldThrowException_WhenBookNotFound(string isbn)
+        {
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new BookWIthNullData(fakeRepo);
+            var delete = new DeleteBook(fakeRepo);
+            delete.DeleteBookIsbn(isbn);
+        }
+        
     }
     
 }
