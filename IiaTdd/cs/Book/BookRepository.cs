@@ -13,7 +13,7 @@ public class BookRepository : IBookRepository
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
 
-    public PostBook GetBookByISBN(string isbn)
+    public PostBook GetBookByIsbn(string isbn)
     {
         string connectionString = _configuration.GetConnectionString("DefaultConnection");
         using MySqlConnection connection = new(connectionString);
@@ -48,5 +48,17 @@ public class BookRepository : IBookRepository
         {
             throw new Exception("Aucun livre trouvé");
         }
+    }
+
+    public bool DeleteBookByIsbn(int  id)
+    {
+        string connectionString = _configuration.GetConnectionString("DefaultConnection");
+        using MySqlConnection connection = new(connectionString);
+        connection.Open();
+        using MySqlCommand command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM projettdd.livre WHERE isbn = @isbn";
+        command.Parameters.AddWithValue("@isbn", id);
+        command.ExecuteNonQuery();
+        return true;
     }
 }

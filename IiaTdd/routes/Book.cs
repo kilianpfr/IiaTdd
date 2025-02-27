@@ -1,5 +1,6 @@
 ﻿using IiaTdd.cs;
 using IiaTdd.cs.Author;
+using IiaTdd.cs.Book;
 using IiaTdd.cs.format;
 using IiaTdd.cs.Interface;
 using IiaTdd.cs.Isbn;
@@ -71,6 +72,15 @@ public class BookController : ControllerBase
         }
         return Ok();
         
+    }
+    [HttpDelete]
+    public IActionResult Delete(int id)
+    {
+        if (id == 0) return BadRequest();
+        var delete = new DeleteBook(_repository);
+        var result = delete.DeleteBookIsbn(id);
+        if (result) return Ok();
+        return BadRequest();
     }
     
     

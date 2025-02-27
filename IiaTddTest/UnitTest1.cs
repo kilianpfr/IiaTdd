@@ -173,25 +173,29 @@ namespace IiaTddTest
           
             bookService.AutoComplete("0987654321");
         }
-        [TestMethod]
-        public void DeleteBook_ShouldReturnTrue()
+        [DataTestMethod]
+        [DataRow(1)]
+        [DataRow(2)]
+        [DataRow(3)]
+        
+        public void DeleteBook_ShouldReturnTrue(int Id)
         {
-            string isbn = "9783135792468";
+            
             IBookRepository fakeRepo = new FakeBookRepository();
             var bookService = new BookWIthNullData(fakeRepo);
             var delete = new DeleteBook(fakeRepo);
-            var result = delete.DeleteBookIsbn(isbn);
+            var result = delete.DeleteBookIsbn(Id);
             Assert.IsTrue(result);
         }
         [DataTestMethod]
-        [DataRow("2266111566")]
+        [DataRow(4)]
         [ExpectedException(typeof(Exception), "Aucun livre trouvé")]
-        public void DeleteBook_ShouldThrowException_WhenBookNotFound(string isbn)
+        public void DeleteBook_ShouldThrowException_WhenBookNotFound(int id)
         {
             IBookRepository fakeRepo = new FakeBookRepository();
             var bookService = new BookWIthNullData(fakeRepo);
             var delete = new DeleteBook(fakeRepo);
-            delete.DeleteBookIsbn(isbn);
+            delete.DeleteBookIsbn(id);
         }
         
     }

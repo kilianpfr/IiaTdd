@@ -26,6 +26,6 @@ public class BookWIthNullData
             CheckIsbnValide.CheckIsbnThirteen(isbn);
 
        
-        return _repository.GetBookByISBN(isbn);
+        return _repository.GetBookByIsbn(isbn);
     }
 }
