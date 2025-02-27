@@ -9,7 +9,8 @@ public class CheckIsbnValide
         {
             throw new Exception("ISBN invalide, le nombre de chiffres doit être de 13");
         }
-
+        isbn = isbn.Replace("-", "");
+        isbn = isbn.Replace(" ", "");
         int sum = 0;
         for (int i = 0; i < 12; i++)
         {

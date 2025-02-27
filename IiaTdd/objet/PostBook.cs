@@ -7,7 +7,7 @@
         GrandFormat 
     }
 
-    public class PostReservation
+    public class PostBook
     {
         public string? Isbn { get; set; }
         public string? Title { get; set; }

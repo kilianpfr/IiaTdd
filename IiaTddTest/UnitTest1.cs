@@ -1,10 +1,17 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IiaTdd.routes; // Assure-toi d'importer ton namespace
 using System;
+using IiaTdd.cs;
 using IiaTdd.cs.Author;
+using IiaTdd.cs.Book;
 using IiaTdd.cs.format;
+using IiaTdd.cs.Interface;
 using IiaTdd.cs.Isbn;
 using IiaTdd.objet;
+using IiaTddTest.Fake;
+using Microsoft.Extensions.Configuration;
+using Moq;
+using MySql.Data.MySqlClient;
 
 namespace IiaTddTest
 {
@@ -31,7 +38,8 @@ namespace IiaTddTest
         }
 
         [DataTestMethod]
-        [DataRow("123456789A", "ISBN ivalide, le dernier caractère doit être un chiffre ou un X pour un ISBN de 10 chiffres")]
+        [DataRow("123456789A",
+            "ISBN ivalide, le dernier caractère doit être un chiffre ou un X pour un ISBN de 10 chiffres")]
         [DataRow("123456789012345", "ISBN ivalide")]
         [DataRow("1234-56789012A", "ISBN ivalide, doit être un chiffre pour un ISBN de 13 chiffres")]
         public void CheckTypeIsbn_Invalid(string isbn, string expectedMessage)
@@ -57,7 +65,8 @@ namespace IiaTddTest
         }
 
         [DataTestMethod]
-        [DataRow("123456789A", "ISBN ivalide, le dernier caractère doit être un chiffre ou un X pour un ISBN de 10 chiffres")]
+        [DataRow("123456789A",
+            "ISBN ivalide, le dernier caractère doit être un chiffre ou un X pour un ISBN de 10 chiffres")]
         [DataRow("123456789012345", "ISBN ivalide")]
         [DataRow("1234-56789012A", "ISBN ivalide, doit être un chiffre pour un ISBN de 13 chiffres")]
         public void ValidIsbn_InvalidIsbn(string isbn, string expectedMessage)
@@ -65,6 +74,7 @@ namespace IiaTddTest
             var exception = Assert.ThrowsException<Exception>(() => CheckIsbnValide.CheckIsbnTen(isbn));
             Assert.AreEqual(expectedMessage, exception.Message);
         }
+
         [DataTestMethod]
         [DataRow("Jean", "Dupont1")]
         [DataRow("Jea2n", "Dupont-Dupond")]
@@ -75,7 +85,16 @@ namespace IiaTddTest
             var exception = Assert.ThrowsException<Exception>(() => CheckAuthor.CheckAuthorName(author));
             Assert.AreEqual("Nom de l'auteur invalide, il ne doit pas contenir de chiffres", exception.Message);
         }
-        
+        [DataTestMethod]
+        [DataRow("Jean", "Du pont")]
+       
+        public void CheckAuthor_InvalidName(string name, string firstName)
+        {
+            var author = new Author() { Name = name, FirstName = firstName };
+            var exception = Assert.ThrowsException<Exception>(() => CheckAuthor.CheckAuthorName(author));
+            Assert.AreEqual("Nom de l'auteur invalide, il ne doit pas contenir d'espace", exception.Message);
+        }
+
         [DataTestMethod]
         [DataRow(0)]
         [DataRow(1)]
@@ -84,6 +103,7 @@ namespace IiaTddTest
         {
             Format.CheckFormatEnum(i);
         }
+
         [DataTestMethod]
         [DataRow(3)]
         public void CheckFormat_Invalid(int i)
@@ -91,7 +111,78 @@ namespace IiaTddTest
             var exception = Assert.ThrowsException<Exception>(() => Format.CheckFormatEnum(i));
             Assert.AreEqual("Format invalide", exception.Message);
         }
+
+        [DataTestMethod]
+        [DataRow("123456789A")]
+        [DataRow("123456789012345")]
+        [DataRow("1234-56789012A")]
+        public void BookWithNullData_Invalid(string isbn)
+        {
+            // Arrange : On suppose que ces ISBN sont invalides et que les méthodes de validation lanceront une exception.
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new BookWIthNullData(fakeRepo);
+
+            // Act & Assert : La validation doit échouer et lancer une exception
+            Assert.ThrowsException<Exception>(() => bookService.AutoComplete(isbn));
+        }
+
+        [DataTestMethod]
+        [DataRow("1234567890", "Le seigneur des anneaux", "Tolkien", "J.R.R", "Christian Bourgois", 0)]
+        [DataRow("9781987654321", "Le mystère du passé", "Renoir", "Jean", "Flammarion", 1)]
+        [DataRow("9783135792468", "Voyage dans le temps", "Curie", "Marie", "Le Seuil", 2)]
+        public void AutoComplete_ShouldReturnBook_WhenBookExists(string isbn, string title, string authorName, string authorFirstName, string editor, int format)
+       
+        {
+
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new BookWIthNullData(fakeRepo);
+            PostBook book = new PostBook()
+            {
+                Isbn = isbn,
+                Title = title,
+                Author = new Author
+                {
+                    Name = authorName,
+                    FirstName = authorFirstName
+                },
+                Editor = editor,
+                Format = (FormatEnum)format
+            };
+     
+            var result = bookService.AutoComplete(isbn);
+
         
-        
+            Assert.AreEqual(book.Isbn, result.Isbn);
+            Assert.AreEqual(book.Title, result.Title);
+            Assert.AreEqual(book.Author.Name, result.Author.Name);
+            Assert.AreEqual(book.Author.FirstName, result.Author.FirstName);
+            Assert.AreEqual(book.Editor, result.Editor);
+            Assert.AreEqual(book.Format, result.Format);
+            
+            
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Aucun livre trouvé")]
+        public void AutoComplete_ShouldThrowException_WhenBookNotFound()
+        {
+          
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new BookWIthNullData(fakeRepo);
+
+          
+            bookService.AutoComplete("0987654321");
+        }
+        [TestMethod]
+        public void DeleteBook_ShouldReturnTrue()
+        {
+            string isbn = "9783135792468";
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new BookWIthNullData(fakeRepo);
+            var delete = new DeleteBook(fakeRepo);
+            var result = delete.DeleteBookIsbn(isbn);
+            Assert.IsTrue(result);
+        }
     }
+    
 }

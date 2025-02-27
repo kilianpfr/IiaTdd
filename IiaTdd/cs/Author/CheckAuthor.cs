@@ -9,6 +9,11 @@ public class CheckAuthor
         {
             throw new Exception("Nom de l'auteur invalide, il ne doit pas contenir de chiffres");
         }
+        //si il y as des espaces dans le nom ou le prénom de l'auteur
+        if (authorName.Name != null && authorName.Name.Contains(" ") || authorName.FirstName != null && authorName.FirstName.Contains(" "))
+        {
+            throw new Exception("Nom de l'auteur invalide, il ne doit pas contenir d'espace");
+        }
       
     }
 }
