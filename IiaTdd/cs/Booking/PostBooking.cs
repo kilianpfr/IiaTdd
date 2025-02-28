@@ -13,6 +13,10 @@ public class PostBooking : IMemberRepository
     
     public void BookingBook(int idBook, int idMember, int numberMonth, bool getmail)
     {
+        if (numberMonth > 4)
+        {
+            throw new Exception("La durée de réservation ne peut pas dépasser 4 mois");
+        }
         _repository.BookingBook(idBook, idMember, numberMonth, getmail);
     }
 }

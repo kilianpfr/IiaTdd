@@ -190,7 +190,7 @@ namespace IiaTddTest
             Assert.IsTrue(result);
         }
         [DataTestMethod]
-        [DataRow(4)]
+        [DataRow(7)]
         [ExpectedException(typeof(Exception), "Aucun livre trouvé")]
         public void DeleteBook_ShouldThrowException_WhenBookNotFound(int id)
         {
@@ -225,7 +225,7 @@ namespace IiaTddTest
         }
         
         [DataTestMethod]
-        [DataRow(4, "1234567890", "Le seigneur des anneaux", "Tolkien", "J.R.R", "Christian Bourgois", 0)]
+        [DataRow(8, "1234567890", "Le seigneur des anneaux", "Tolkien", "J.R.R", "Christian Bourgois", 0)]
         [ExpectedException(typeof(Exception), "Aucun livre trouvé")]
         public void UpdateBook_ShouldThrowException_WhenBookNotFound(int id, string isbn, string title, string authorName, string authorFirstName, string editor, int format)
         {
@@ -403,6 +403,19 @@ namespace IiaTddTest
             bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
          
         }
+        [DataTestMethod]
+        [DataRow(1,1,2,false,2,2,false,3,2,false,4,2,false)]
+        [ExpectedException(typeof(Exception), "Ce membre a déjà réservé 3 livres")]
+        public void BookingBook_ShouldThrowException_WhenMemberHasAlreadyReservedThreeBooks(int idBook1, int idMemeber1, int numberMonth1, bool getMail1, int idBook2, int idMemeber2, int numberMonth2, bool getMail2, int idBook3, int idMemeber3, int numberMonth3, bool getMail3, int idBook4, int idMemeber4, int numberMonth4, bool getMail4)
+        {
+            IMemberRepository fakeRepo = new FakeMemberRepository();
+            var bookService = new PostBooking(fakeRepo);
+            bookService.BookingBook(idBook1, idMemeber1, numberMonth1, getMail1);
+            bookService.BookingBook(idBook2, idMemeber2, numberMonth2, getMail2);
+            bookService.BookingBook(idBook3, idMemeber3, numberMonth3, getMail3);
+            bookService.BookingBook(idBook4, idMemeber4, numberMonth4, getMail4);
+        }
+    
         
         
         
