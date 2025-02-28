@@ -9,14 +9,9 @@ using MySql.Data.MySqlClient;
 namespace IiaTdd.routes;
 [ApiController]
 [Route("[controller]")]
-public class ReservationController : ControllerBase
+public class BookingController(IConfiguration configuration) : ControllerBase
 {
-    public readonly IConfiguration Configuration;
-
-    public ReservationController(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
+    public readonly IConfiguration Configuration = configuration;
 
     [HttpGet]
     public bool Get()

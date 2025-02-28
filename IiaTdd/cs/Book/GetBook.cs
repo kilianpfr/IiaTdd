@@ -21,5 +21,12 @@ public class GetBook
         return _repository.GetBookByAuthor(author);
     }
 
-   
+
+    public List<GetBookObj> GetBookByTitle(string title)
+    {
+        if (title is null)
+            throw new ArgumentNullException(nameof(title));
+        
+        return _repository.GetBookByTitle(title);
+    }
 }

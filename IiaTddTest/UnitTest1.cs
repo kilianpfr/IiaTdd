@@ -4,6 +4,7 @@ using System;
 using IiaTdd.cs;
 using IiaTdd.cs.Author;
 using IiaTdd.cs.Book;
+using IiaTdd.cs.Booking;
 using IiaTdd.cs.format;
 using IiaTdd.cs.Interface;
 using IiaTdd.cs.Isbn;
@@ -366,6 +367,28 @@ namespace IiaTddTest
             var bookService = new GetBook(fakeRepo);
             var error = Assert.ThrowsException<Exception>(() => bookService.GetBookByTitle(title));
             Assert.AreEqual("Aucun livre trouvé", error.Message);
+        }
+        
+        [DataTestMethod]
+        [DataRow(1,1,2,false)]
+        [DataRow(2,2,3,false)]
+        [DataRow(1,3,4,false)]
+        public void BookingBook_ShouldSuccess(int idBook, int idMemeber, int numberMonth, bool getMail)
+        {
+            IMemberRepository fakeRepo = new FakeMemberRepository();
+            var bookService = new PostBooking(fakeRepo);
+            bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
+
+        }
+        
+        [DataTestMethod]
+        [DataRow(4,1,2,false)]
+        [ExpectedException(typeof(Exception), "Aucun livre trouvé")]
+        public void BookingBook_ShouldThrowException_WhenBookNotFound(int idBook, int idMemeber, int numberMonth, bool getMail)
+        {
+            IMemberRepository fakeRepo = new FakeMemberRepository();
+            var bookService = new PostBooking(fakeRepo);
+            bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
         }
         
         

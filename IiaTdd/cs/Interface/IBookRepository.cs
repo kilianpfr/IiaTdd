@@ -14,4 +14,7 @@ public interface IBookRepository
     
     List<GetBookObj> GetBookByAuthor(objet.Author author);
     
+    List<GetBookObj> GetBookByTitle(string title);
+    
+    
 }

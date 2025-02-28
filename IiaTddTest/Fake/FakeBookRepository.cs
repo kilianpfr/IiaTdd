@@ -39,6 +39,15 @@ public class FakeBookRepository : IBookRepository
             Author = new Author { FirstName = "Marie", Name = "Curie" },
             Editor = "Le Seuil",
             Format = FormatEnum.GrandFormat
+        },
+        new GetBookObj
+        {
+            Id = 4,
+            Isbn = "9783135792468",
+            Title = "Voyage dans le temps",
+            Author = new Author { FirstName = "Marie", Name = "Curie" },
+            Editor = "Le Seuil",
+            Format = FormatEnum.GrandFormat
         }
             
     };
@@ -130,5 +139,22 @@ public class FakeBookRepository : IBookRepository
             return books;
         
        
+    }
+
+    public List<GetBookObj> GetBookByTitle(string title)
+    {
+        try
+        {
+            var books = _books.Where(x => x.Title == title).ToList();
+            if (books.Count == 0)
+            {
+                throw new Exception("Aucun livre trouvé");
+            }
+            return books;
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Aucun livre trouvé");
+        }
     }
 }

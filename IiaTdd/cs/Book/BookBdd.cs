@@ -103,4 +103,9 @@ public class BookBdd : IBookRepository
     {
         throw new NotImplementedException();
     }
+
+    public List<GetBookObj> GetBookByTitle(string title)
+    {
+        throw new NotImplementedException();
+    }
 }
