@@ -120,11 +120,11 @@ namespace IiaTddTest
         [DataRow("1234-56789012A")]
         public void BookWithNullData_Invalid(string isbn)
         {
-            // Arrange : On suppose que ces ISBN sont invalides et que les méthodes de validation lanceront une exception.
+         
             IBookRepository fakeRepo = new FakeBookRepository();
             var bookService = new PostBook(fakeRepo);
 
-            // Act & Assert : La validation doit échouer et lancer une exception
+           
             Assert.ThrowsException<Exception>(() => bookService.AutoComplete(isbn));
         }
 

@@ -35,11 +35,11 @@ public class PostBook
         if(bookObj.Isbn == null)
             throw new Exception("Isbn invalide");
         
-        //aucun des champs ne doit être null
+        
         if (bookObj.Title == null || bookObj.Author == null || bookObj.Editor == null || bookObj.Format == 0)
         {
             
-            //on vérifie si l'isbn est valide
+            
             CheckIsbn.TenOrThirteen(bookObj.Isbn);
             if (bookObj.Isbn.Length == 10)
                 CheckIsbnValide.CheckIsbnTen(bookObj.Isbn);
@@ -49,9 +49,9 @@ public class PostBook
             bookObj = AutoComplete(bookObj.Isbn);
         }
 
-        //si l'auteur n'est pas valide
+        
         CheckAuthor.CheckAuthorName(bookObj.Author);
-        //si le format n'est pas valide
+        
         Format.CheckFormatEnum((int)bookObj.Format);
         _repository.AddBook(bookObj);
         

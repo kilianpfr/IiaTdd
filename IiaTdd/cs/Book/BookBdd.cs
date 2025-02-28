@@ -26,7 +26,7 @@ public class BookBdd : IBookRepository
         if (reader.Read())
         {
             
-            //on split le nom et le prenom par l'espace
+         
             string[] author = reader.GetString("auteur").Split(' ');
             
             
@@ -80,7 +80,7 @@ public class BookBdd : IBookRepository
     
     public void AddBook(PostBookObj bookObj)
     {
-        //si il manque un champ on essaie l'autocompletion
+   
         if (bookObj.Isbn == null || bookObj.Title == null || bookObj.Author == null || bookObj.Editor == null || bookObj.Format == 0)
         {
             if (bookObj.Isbn != null) bookObj = GetBookByIsbnForPost(bookObj.Isbn);
