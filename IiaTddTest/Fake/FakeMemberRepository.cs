@@ -66,5 +66,8 @@ public class FakeMemberRepository : IMemberRepository
     public void StopBookingBook(int idBook, int idMember)
     {
         
+        var link = _links.Find(x => x.IdBook == idBook && x.IdMember == idMember);
+       
+        _links.Remove(link);
     }
 }
