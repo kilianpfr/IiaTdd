@@ -67,6 +67,10 @@ public class FakeMemberRepository : IMemberRepository
     {
         
         var link = _links.Find(x => x.IdBook == idBook && x.IdMember == idMember);
+        if (link == null)
+        {
+            throw new Exception("Livre ou membre non trouvé");
+        }
        
         _links.Remove(link);
     }

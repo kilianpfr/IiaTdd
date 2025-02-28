@@ -424,6 +424,16 @@ namespace IiaTddTest
             bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
             bookService.StopBookingBook(idBook, idMemeber);
         }
+        [DataTestMethod]
+        [DataRow(1,1,2,false)]
+        [ExpectedException(typeof(Exception), "Livre ou membre non trouvé")]
+        public void StopBookingBook_ShouldFail(int idBook, int idMemeber, int numberMonth, bool getMail)
+        {
+            IMemberRepository fakeRepo = new FakeMemberRepository();
+            var bookService = new PostBooking(fakeRepo);
+           
+            bookService.StopBookingBook(idBook, idMemeber);
+        }
     
         
         
