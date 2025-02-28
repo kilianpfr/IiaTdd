@@ -12,4 +12,6 @@ public interface IBookRepository
     
     void AddBook(PostBookObj bookObj);
     
+    List<GetBookObj> GetBookByAuthor(objet.Author author);
+    
 }

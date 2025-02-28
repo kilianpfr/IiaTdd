@@ -98,6 +98,9 @@ public class BookBdd : IBookRepository
         command.Parameters.AddWithValue("@format", bookObj.Format);
         command.ExecuteNonQuery();
     }
-    
 
+    public List<GetBookObj> GetBookByAuthor(objet.Author author)
+    {
+        throw new NotImplementedException();
+    }
 }

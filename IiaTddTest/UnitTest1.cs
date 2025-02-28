@@ -328,6 +328,23 @@ namespace IiaTddTest
             var result = bookService.GetBookByAuthor(author);
             Assert.IsNotNull(result);
         }
+        [DataTestMethod]
+        [DataRow("Tolien", "J.R.R")]
+        [DataRow("Roir", "Jean")]
+        [DataRow("Cuie", "Marie")]
+        public void GetBookByAuthor_ShouldThrowException_WhenAuthorNotFound(string name, string firstName)
+        {
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new PostBook(fakeRepo);
+            var author = new Author()
+            {
+                Name = name,
+                FirstName = firstName
+            };
+           var error= Assert.ThrowsException<Exception>(() => bookService.GetBookByAuthor(author));
+            Assert.AreEqual("Aucun livre trouvé", error.Message);
+        }
+        
         
         
         

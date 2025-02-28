@@ -118,5 +118,17 @@ public class FakeBookRepository : IBookRepository
                 Format = bookObj.Format
             });
     }
-    
+
+    public List<GetBookObj> GetBookByAuthor(Author author)
+    {
+        
+            var books = _books.Where(x => x.Author == author).ToList();
+            if (books.Count == 0)
+            {
+                throw new Exception("Aucun livre trouvé");
+            }
+            return books;
+        
+       
+    }
 }
