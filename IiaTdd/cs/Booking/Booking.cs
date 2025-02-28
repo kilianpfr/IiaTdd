@@ -34,4 +34,9 @@ public class Booking : IMemberRepository
     {
         return _repository.GetLinks();
     }
+
+    public List<GetBookObj> SendMail(int monthpassed)
+    {
+        return _repository.SendMail(monthpassed);
+    }
 }

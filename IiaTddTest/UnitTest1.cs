@@ -463,6 +463,20 @@ namespace IiaTddTest
             Assert.IsNotNull(result);
         }
         
+        [DataTestMethod]
+        [DataRow(3)]
+        public void GetAllBookings_ShouldReturnBookingsWithMonthPassed(int monthPassed)
+            
+        {
+            IMemberRepository fakeRepo = new FakeMemberRepository();
+            var bookService = new Booking(fakeRepo);
+            bookService.BookingBook(1, 1, 1, true);
+            bookService.BookingBook(2, 1, 4, true);
+            bookService.BookingBook(3, 1, 1, true);
+           
+            var result = bookService.SendMail(monthPassed);
+            Assert.AreEqual(1, result.Count);
+        }
     
         
         

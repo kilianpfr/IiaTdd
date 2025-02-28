@@ -103,4 +103,20 @@ public class FakeMemberRepository : IMemberRepository
     {
         return _links;
     }
+
+    public List<GetBookObj> SendMail(int monthpassed)
+    {
+        var fakebook = new FakeBookRepository();
+        List<GetBookObj> books = fakebook.GetBooks();
+        List<GetBookObj> booksToSend = new();
+        foreach (var link in _links.Where(x => x.Getmail && x.Numbermonth > monthpassed))
+        {
+            var book = books.Find(x => x.Id == link.IdBook);
+            if (book != null)
+            {
+                booksToSend.Add(book);
+            }
+        }
+        return booksToSend;
+    }
 }

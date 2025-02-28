@@ -9,4 +9,6 @@ public interface IMemberRepository
     List<GetBookObj> GetHistoryAuthor(int idMember);
     
     List<GetLink> GetLinks();
+    
+    List<GetBookObj> SendMail(int monthpassed);
 }
