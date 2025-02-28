@@ -319,7 +319,7 @@ namespace IiaTddTest
         public void GetBookByAuthor_ShouldReturnBook(string name, string firstName)
         {
             IBookRepository fakeRepo = new FakeBookRepository();
-            var bookService = new PostBook(fakeRepo);
+            var bookService = new GetBook(fakeRepo);
             var author = new Author()
             {
                 Name = name,
@@ -335,13 +335,36 @@ namespace IiaTddTest
         public void GetBookByAuthor_ShouldThrowException_WhenAuthorNotFound(string name, string firstName)
         {
             IBookRepository fakeRepo = new FakeBookRepository();
-            var bookService = new PostBook(fakeRepo);
+            var bookService = new GetBook(fakeRepo);
             var author = new Author()
             {
                 Name = name,
                 FirstName = firstName
             };
            var error= Assert.ThrowsException<Exception>(() => bookService.GetBookByAuthor(author));
+            Assert.AreEqual("Aucun livre trouvé", error.Message);
+        }
+        
+        [DataTestMethod]
+        [DataRow("Le seigneur des anneaux")]
+        [DataRow("Le mystère du passé")]
+        [DataRow("Voyage dans le temps")]
+        public void GetBookByTitle_ShouldReturnBook(string title)
+        {
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new GetBook(fakeRepo);
+            var result = bookService.GetBookByTitle(title);
+            Assert.IsNotNull(result);
+        }
+        [DataTestMethod]
+        [DataRow("L'anneau des seigneur")]
+        [DataRow("Le passé du mystère")]
+        [DataRow("Le temps dans le voyage")]
+        public void GetBookByTitle_ShouldThrowException_WhenTitleNotFound(string title)
+        {
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new GetBook(fakeRepo);
+            var error = Assert.ThrowsException<Exception>(() => bookService.GetBookByTitle(title));
             Assert.AreEqual("Aucun livre trouvé", error.Message);
         }
         

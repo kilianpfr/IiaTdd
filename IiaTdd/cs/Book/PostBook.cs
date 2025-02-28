@@ -58,8 +58,5 @@ public class PostBook
         
     }
 
-    public GetBookObj GetBookByAuthor(objet.Author author)
-    {
-        throw new NotImplementedException();
-    }
+  
 }

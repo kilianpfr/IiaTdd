@@ -122,7 +122,7 @@ public class FakeBookRepository : IBookRepository
     public List<GetBookObj> GetBookByAuthor(Author author)
     {
         
-            var books = _books.Where(x => x.Author == author).ToList();
+            var books = _books.Where(x => x.Author.Name == author.Name && x.Author.FirstName == author.FirstName).ToList();
             if (books.Count == 0)
             {
                 throw new Exception("Aucun livre trouvé");
