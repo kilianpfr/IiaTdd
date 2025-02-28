@@ -406,14 +406,23 @@ namespace IiaTddTest
         [DataTestMethod]
         [DataRow(1,1,2,false,2,2,false,3,2,false,4,2,false)]
         [ExpectedException(typeof(Exception), "Ce membre a déjà réservé 3 livres")]
-        public void BookingBook_ShouldThrowException_WhenMemberHasAlreadyReservedThreeBooks(int idBook1, int idMemeber1, int numberMonth1, bool getMail1, int idBook2, int idMemeber2, int numberMonth2, bool getMail2, int idBook3, int idMemeber3, int numberMonth3, bool getMail3, int idBook4, int idMemeber4, int numberMonth4, bool getMail4)
+        public void BookingBook_ShouldThrowException_WhenMemberHasAlreadyReservedThreeBooks(int idBook1,int idmember, int mois, bool mail, int book2 , int mois2, bool mail2, int book3, int mois3, bool mail3, int book4, int mois4, bool mail4)
         {
             IMemberRepository fakeRepo = new FakeMemberRepository();
             var bookService = new PostBooking(fakeRepo);
-            bookService.BookingBook(idBook1, idMemeber1, numberMonth1, getMail1);
-            bookService.BookingBook(idBook2, idMemeber2, numberMonth2, getMail2);
-            bookService.BookingBook(idBook3, idMemeber3, numberMonth3, getMail3);
-            bookService.BookingBook(idBook4, idMemeber4, numberMonth4, getMail4);
+            bookService.BookingBook(idBook1, idmember, mois, mail);
+            bookService.BookingBook(book2, idmember, mois2, mail2);
+            bookService.BookingBook(book3, idmember, mois3, mail3);
+            bookService.BookingBook(book4, idmember, mois4, mail4);
+        }
+        [DataTestMethod]
+        [DataRow(1,1,2,false)]
+        public void StopBookingBook_ShouldSuccess(int idBook, int idMemeber, int numberMonth, bool getMail)
+        {
+            IMemberRepository fakeRepo = new FakeMemberRepository();
+            var bookService = new PostBooking(fakeRepo);
+            bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
+            bookService.StopBookingBook(idBook, idMemeber);
         }
     
         

@@ -19,4 +19,8 @@ public class PostBooking : IMemberRepository
         }
         _repository.BookingBook(idBook, idMember, numberMonth, getmail);
     }
+    public void StopBookingBook(int idBook, int idMember)
+    {
+        _repository.StopBookingBook(idBook, idMember);
+    }
 }

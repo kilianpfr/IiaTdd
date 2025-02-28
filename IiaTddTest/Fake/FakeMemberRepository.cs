@@ -49,8 +49,10 @@ public class FakeMemberRepository : IMemberRepository
         {
             throw new Exception("Livre ou membre non trouvé");
         }
-      
-       
+        if(_links.Where(x =>   x.IdMember == idMember).ToList().Count >= 3)
+        {
+            throw new Exception("Ce membre a déjà réservé 3 livres");
+        }
         _links.Add(new GetLink()
         {
             Id = _links.Count + 1,
@@ -59,7 +61,10 @@ public class FakeMemberRepository : IMemberRepository
             Numbermonth = numberMonth,
             Getmail = getmail
         });
-        
+    }
+
+    public void StopBookingBook(int idBook, int idMember)
+    {
         
     }
 }
