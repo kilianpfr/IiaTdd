@@ -382,15 +382,27 @@ namespace IiaTddTest
         }
         
         [DataTestMethod]
-        [DataRow(4,1,2,false)]
+        [DataRow(9,1,2,false)]
+        [DataRow(2,9,3,false)]
         [ExpectedException(typeof(Exception), "Livre ou membre non trouvé")]
-        public void BookingBook_ShouldThrowException_WhenBookNotFound(int idBook, int idMemeber, int numberMonth, bool getMail)
+        public void BookingBook_ShouldThrowException_WhenBookOrMemberNotFound(int idBook, int idMemeber, int numberMonth, bool getMail)
         {
             IMemberRepository fakeRepo = new FakeMemberRepository();
             var bookService = new PostBooking(fakeRepo);
             bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
         }
-        
+        [DataTestMethod]
+        [DataRow(1,1,9,true)]
+        [DataRow(2,2,9,true)]
+        [DataRow(1,3,9,true)]
+        [ExpectedException(typeof(Exception), "La durée de réservation ne peut pas dépasser 4 mois")]
+        public void BookingBook_OutsideOfMaxMonth(int idBook, int idMemeber, int numberMonth, bool getMail)
+        {
+            IMemberRepository fakeRepo = new FakeMemberRepository();
+            var bookService = new PostBooking(fakeRepo);
+            bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
+         
+        }
         
         
         
