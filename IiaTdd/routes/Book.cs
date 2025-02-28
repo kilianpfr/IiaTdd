@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Extensions;
 using MySql.Data.MySqlClient;
 
+
 namespace IiaTdd.routes;
 
 [ApiController]
@@ -25,36 +26,36 @@ public class BookController : ControllerBase
         _repository = repository;
     }
    
-    public IActionResult Post([FromBody] PostBook book)
+    public IActionResult Post([FromBody] PostBookObj bookObj)
     {
         
         //si tout les champs sont remplis
-        if (book.Isbn != null && book.Title != null && book.Author != null && book.Editor != null && book.Format != 0)
+        if (bookObj.Isbn != null && bookObj.Title != null && bookObj.Author != null && bookObj.Editor != null && bookObj.Format != 0)
         {
 
-            if (book.Isbn == null || (!CheckIsbnValide.CheckIsbnTen(book.Isbn) &&
-                                      !CheckIsbnValide.CheckIsbnThirteen(book.Isbn))) return BadRequest();
-            CheckAuthor.CheckAuthorName(book.Author);
-            Format.CheckFormatEnum((int)book.Format);
+            if (bookObj.Isbn == null || (!CheckIsbnValide.CheckIsbnTen(bookObj.Isbn) &&
+                                      !CheckIsbnValide.CheckIsbnThirteen(bookObj.Isbn))) return BadRequest();
+            CheckAuthor.CheckAuthorName(bookObj.Author);
+            Format.CheckFormatEnum((int)bookObj.Format);
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             using var connection = new MySqlConnection(connectionString);
             connection.Open();
             var command = connection.CreateCommand();
             command.CommandText =
                 "INSERT INTO projettdd.livre (isbn, titre, auteur, editeur, format, reserver) VALUES (@isbn, @titre, @auteur, @editeur, @format, false)";
-            command.Parameters.AddWithValue("@isbn", book.Isbn);
-            command.Parameters.AddWithValue("@titre", book.Title);
-            if (book.Author != null)
-                command.Parameters.AddWithValue("@auteur", book.Author.Name + " " + book.Author.FirstName);
-            command.Parameters.AddWithValue("@editeur", book.Editor);
-            command.Parameters.AddWithValue("@format", book.Format.GetDisplayName());
+            command.Parameters.AddWithValue("@isbn", bookObj.Isbn);
+            command.Parameters.AddWithValue("@titre", bookObj.Title);
+            if (bookObj.Author != null)
+                command.Parameters.AddWithValue("@auteur", bookObj.Author.Name + " " + bookObj.Author.FirstName);
+            command.Parameters.AddWithValue("@editeur", bookObj.Editor);
+            command.Parameters.AddWithValue("@format", bookObj.Format.GetDisplayName());
             command.ExecuteNonQuery();
             
         }
         else
         {
-            var empty = new BookWIthNullData(_repository);
-            var Book = empty.AutoComplete(book.Isbn);
+            var empty = new PostBook(_repository);
+            var Book = empty.AutoComplete(bookObj.Isbn);
             if (Book == null) return BadRequest();
             using var connection = new MySqlConnection(Configuration.GetConnectionString("DefaultConnection"));
             connection.Open();
@@ -82,6 +83,19 @@ public class BookController : ControllerBase
         if (result) return Ok();
         return BadRequest();
     }
+    [HttpPut]
+    public IActionResult Put(int id, [FromBody] PostBookObj bookObj)
+    {
+        if (id == 0) return BadRequest();
+        if (bookObj.Isbn == null || (!CheckIsbnValide.CheckIsbnTen(bookObj.Isbn) &&
+                                      !CheckIsbnValide.CheckIsbnThirteen(bookObj.Isbn))) return BadRequest();
+        CheckAuthor.CheckAuthorName(bookObj.Author);
+        Format.CheckFormatEnum((int)bookObj.Format);
+        var update = new UpdateBook(_repository);
+        update.UpdateBookIdRep(id, bookObj);
+        return Ok();
+    }
+    
     
     
 }

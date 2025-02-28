@@ -12,9 +12,9 @@ public class UpdateBook
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public bool UpdateBookIdRep(int id, PostBook book)
+    public bool UpdateBookIdRep(int id, objet.PostBookObj bookObj)
     {
-        _repository.UpdateBookById(id, book);
+        _repository.UpdateBookById(id, bookObj);
         return true;
     }
 }

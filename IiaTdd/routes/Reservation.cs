@@ -24,7 +24,7 @@ public class ReservationController : ControllerBase
         return true;
     }
     [HttpPost]
-    public IActionResult Post([FromBody] PostBook book)
+    public IActionResult Post([FromBody] PostBookObj bookObj)
     {
         return Ok();
     }

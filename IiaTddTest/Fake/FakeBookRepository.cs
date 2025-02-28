@@ -6,9 +6,9 @@ namespace IiaTddTest.Fake;
 
 public class FakeBookRepository : IBookRepository
 {
-    List<GetBook> _books = new List<GetBook>
+    List<GetBookObj> _books = new List<GetBookObj>
     {
-        new GetBook()
+        new GetBookObj()
         {
             Id = 1,
             Isbn = "1234567890",
@@ -22,7 +22,7 @@ public class FakeBookRepository : IBookRepository
             Format = FormatEnum.Poche
         },
             
-        new GetBook
+        new GetBookObj
         {
             Id = 2,
             Isbn = "9781987654321",
@@ -31,7 +31,7 @@ public class FakeBookRepository : IBookRepository
             Editor = "Flammarion",
             Format = FormatEnum.Broché
         },
-        new GetBook
+        new GetBookObj
         {
             Id=3,
             Isbn = "9783135792468",
@@ -42,14 +42,14 @@ public class FakeBookRepository : IBookRepository
         }
             
     };
-    public PostBook GetBookByIsbn(string isbn)
+    public PostBookObj GetBookByIsbn(string isbn)
     {
         
-        PostBook? book;
+        PostBookObj? book;
         try
         {
             var getbook = _books.FirstOrDefault(x => x.Isbn == isbn);
-             book = new PostBook()
+             book = new PostBookObj()
              {
                  Isbn = getbook?.Isbn,
                  Title = getbook?.Title,
@@ -85,7 +85,7 @@ public class FakeBookRepository : IBookRepository
             throw new Exception("Aucun livre trouvé");
         }
     }
-    public void UpdateBookById(int id, PostBook book)
+    public void UpdateBookById(int id, PostBookObj bookObj)
     {
         try
         {
@@ -97,15 +97,39 @@ public class FakeBookRepository : IBookRepository
             {
                 throw new Exception("Aucun livre trouvé");
             }
-            bookToUpdate.Isbn = book.Isbn;
-            bookToUpdate.Title = book.Title;
-            bookToUpdate.Author = book.Author;
-            bookToUpdate.Editor = book.Editor;
-            bookToUpdate.Format = book.Format;
+            bookToUpdate.Isbn = bookObj.Isbn;
+            bookToUpdate.Title = bookObj.Title;
+            bookToUpdate.Author = bookObj.Author;
+            bookToUpdate.Editor = bookObj.Editor;
+            bookToUpdate.Format = bookObj.Format;
         }
         catch (Exception e)
         {
             throw new Exception("Aucun livre trouvé");
+        }
+    }
+
+    public void AddBook(PostBookObj bookObj)
+    {
+        //on verifie si le livre est complet
+        if (bookObj.Isbn == null || bookObj.Title == null || bookObj.Author == null || bookObj.Editor == null || bookObj.Format == 0)
+        {
+            
+        }else if (_books.Any(x => x.Isbn == bookObj.Isbn))
+        {
+            throw new Exception("Le livre existe déjà");
+        }
+        else
+        {
+            _books.Add(new GetBookObj()
+            {
+                Id = _books.Count + 1,
+                Isbn = bookObj.Isbn,
+                Title = bookObj.Title,
+                Author = bookObj.Author,
+                Editor = bookObj.Editor,
+                Format = bookObj.Format
+            });
         }
     }
 }

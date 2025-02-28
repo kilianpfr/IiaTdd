@@ -1,6 +1,6 @@
 ﻿namespace IiaTdd.objet;
 
-public class GetBook
+public class GetBookObj
 {
     public int Id { get; set; }
     public string? Isbn { get; set; }

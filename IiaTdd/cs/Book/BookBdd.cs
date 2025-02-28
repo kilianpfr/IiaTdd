@@ -13,7 +13,7 @@ public class BookBdd : IBookRepository
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
 
-    public PostBook GetBookByIsbn(string isbn)
+    public objet.PostBookObj GetBookByIsbn(string isbn)
     {
         string connectionString = _configuration.GetConnectionString("DefaultConnection");
         using MySqlConnection connection = new(connectionString);
@@ -30,7 +30,7 @@ public class BookBdd : IBookRepository
             string[] author = reader.GetString("auteur").Split(' ');
             
             
-            return new PostBook()
+            return new objet.PostBookObj()
             {
              
                 Isbn = reader.GetString("isbn"),
@@ -62,21 +62,42 @@ public class BookBdd : IBookRepository
         return true;
     }
     
-    public void UpdateBookById(int id, PostBook book)
+    public void UpdateBookById(int id, PostBookObj bookObj)
     {
         string connectionString = _configuration.GetConnectionString("DefaultConnection");
         using MySqlConnection connection = new(connectionString);
         connection.Open();
         using MySqlCommand command = connection.CreateCommand();
         command.CommandText = "UPDATE projettdd.livre SET isbn = @isbn, titre = @titre, auteur = @auteur, editeur = @editeur, format = @format WHERE id = @id";
-        command.Parameters.AddWithValue("@isbn", book.Isbn);
-        command.Parameters.AddWithValue("@titre", book.Title);
-        command.Parameters.AddWithValue("@auteur", book.Author.Name + " " + book.Author.FirstName);
-        command.Parameters.AddWithValue("@editeur", book.Editor);
-        command.Parameters.AddWithValue("@format", book.Format);
+        command.Parameters.AddWithValue("@isbn", bookObj.Isbn);
+        command.Parameters.AddWithValue("@titre", bookObj.Title);
+        command.Parameters.AddWithValue("@auteur", bookObj.Author.Name + " " + bookObj.Author.FirstName);
+        command.Parameters.AddWithValue("@editeur", bookObj.Editor);
+        command.Parameters.AddWithValue("@format", bookObj.Format);
         command.Parameters.AddWithValue("@id", id);
         command.ExecuteNonQuery();
-       
-        
     }
+    
+    public void AddBook(PostBookObj bookObj)
+    {
+        //si il manque un champ on essaie l'autocompletion
+        if (bookObj.Isbn == null || bookObj.Title == null || bookObj.Author == null || bookObj.Editor == null || bookObj.Format == 0)
+        {
+            if (bookObj.Isbn != null) bookObj = GetBookByIsbn(bookObj.Isbn);
+        }
+        
+        string connectionString = _configuration.GetConnectionString("DefaultConnection");
+        using MySqlConnection connection = new(connectionString);
+        connection.Open();
+        using MySqlCommand command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO projettdd.livre (isbn, titre, auteur, editeur, format, reserver) VALUES (@isbn, @titre, @auteur, @editeur, @format, false)";
+        command.Parameters.AddWithValue("@isbn", bookObj.Isbn);
+        command.Parameters.AddWithValue("@titre", bookObj.Title);
+        command.Parameters.AddWithValue("@auteur", bookObj.Author.Name + " " + bookObj.Author.FirstName);
+        command.Parameters.AddWithValue("@editeur", bookObj.Editor);
+        command.Parameters.AddWithValue("@format", bookObj.Format);
+        command.ExecuteNonQuery();
+    }
+    
+
 }

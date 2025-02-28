@@ -12,6 +12,7 @@ using IiaTddTest.Fake;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using MySql.Data.MySqlClient;
+using PostBook = IiaTdd.cs.Book.PostBook;
 
 namespace IiaTddTest
 {
@@ -120,7 +121,7 @@ namespace IiaTddTest
         {
             // Arrange : On suppose que ces ISBN sont invalides et que les méthodes de validation lanceront une exception.
             IBookRepository fakeRepo = new FakeBookRepository();
-            var bookService = new BookWIthNullData(fakeRepo);
+            var bookService = new PostBook(fakeRepo);
 
             // Act & Assert : La validation doit échouer et lancer une exception
             Assert.ThrowsException<Exception>(() => bookService.AutoComplete(isbn));
@@ -135,8 +136,8 @@ namespace IiaTddTest
         {
 
             IBookRepository fakeRepo = new FakeBookRepository();
-            var bookService = new BookWIthNullData(fakeRepo);
-            PostBook book = new PostBook()
+            var bookService = new PostBook(fakeRepo);
+            IiaTdd.objet.PostBookObj bookObj = new IiaTdd.objet.PostBookObj()
             {
                 Isbn = isbn,
                 Title = title,
@@ -152,12 +153,12 @@ namespace IiaTddTest
             var result = bookService.AutoComplete(isbn);
 
         
-            Assert.AreEqual(book.Isbn, result.Isbn);
-            Assert.AreEqual(book.Title, result.Title);
-            Assert.AreEqual(book.Author.Name, result.Author.Name);
-            Assert.AreEqual(book.Author.FirstName, result.Author.FirstName);
-            Assert.AreEqual(book.Editor, result.Editor);
-            Assert.AreEqual(book.Format, result.Format);
+            Assert.AreEqual(bookObj.Isbn, result.Isbn);
+            Assert.AreEqual(bookObj.Title, result.Title);
+            Assert.AreEqual(bookObj.Author.Name, result.Author.Name);
+            Assert.AreEqual(bookObj.Author.FirstName, result.Author.FirstName);
+            Assert.AreEqual(bookObj.Editor, result.Editor);
+            Assert.AreEqual(bookObj.Format, result.Format);
             
             
         }
@@ -168,7 +169,7 @@ namespace IiaTddTest
         {
           
             IBookRepository fakeRepo = new FakeBookRepository();
-            var bookService = new BookWIthNullData(fakeRepo);
+            var bookService = new PostBook(fakeRepo);
 
           
             bookService.AutoComplete("0987654321");
@@ -182,7 +183,7 @@ namespace IiaTddTest
         {
             
             IBookRepository fakeRepo = new FakeBookRepository();
-            var bookService = new BookWIthNullData(fakeRepo);
+            var bookService = new PostBook(fakeRepo);
             var delete = new DeleteBook(fakeRepo);
             var result = delete.DeleteBookIdRep(Id);
             Assert.IsTrue(result);
@@ -193,7 +194,7 @@ namespace IiaTddTest
         public void DeleteBook_ShouldThrowException_WhenBookNotFound(int id)
         {
             IBookRepository fakeRepo = new FakeBookRepository();
-            var bookService = new BookWIthNullData(fakeRepo);
+            var bookService = new PostBook(fakeRepo);
             var delete = new DeleteBook(fakeRepo);
             delete.DeleteBookIdRep(id);
         }
@@ -204,9 +205,9 @@ namespace IiaTddTest
         public void UpdateBook_ShouldReturnTrue(int id, string isbn, string title, string authorName, string authorFirstName, string editor, int format)
         {
             IBookRepository fakeRepo = new FakeBookRepository();
-            var bookService = new BookWIthNullData(fakeRepo);
+            var bookService = new PostBook(fakeRepo);
             var update = new UpdateBook(fakeRepo);
-            var book = new PostBook()
+            var book = new IiaTdd.objet.PostBookObj()
             {
                 Isbn = isbn,
                 Title = title,
@@ -228,9 +229,9 @@ namespace IiaTddTest
         public void UpdateBook_ShouldThrowException_WhenBookNotFound(int id, string isbn, string title, string authorName, string authorFirstName, string editor, int format)
         {
             IBookRepository fakeRepo = new FakeBookRepository();
-            var bookService = new BookWIthNullData(fakeRepo);
+            var bookService = new PostBook(fakeRepo);
             var update = new UpdateBook(fakeRepo);
-            var book = new PostBook()
+            var book = new IiaTdd.objet.PostBookObj()
             {
                 Isbn = isbn,
                 Title = title,
@@ -243,6 +244,51 @@ namespace IiaTddTest
                 Format = (FormatEnum)format
             };
             update.UpdateBookIdRep(id, book);
+        }
+        //methode post qui fonctionne 
+        [TestMethod]
+        [DataRow("1234567890", "Le seigneur des anneaux", "Tolkien", "J.R.R", "Christian Bourgois", 0)]
+        [DataRow("1234-567890123", "Le mystère du passé", "Renoir", "Jean", "Flammarion", 1)]
+        [DataRow("9783161484101", "Voyage dans le temps", "Curie", "Marie", "Le Seuil", 2)]
+        public void PostBook_ShouldReturnTrue(string isbn, string title, string authorName, string authorFirstName, string editor, int format)
+        {
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new PostBook(fakeRepo);
+            var book = new IiaTdd.objet.PostBookObj()
+            {
+                Isbn = isbn,
+                Title = title,
+                Author = new Author
+                {
+                    Name = authorName,
+                    FirstName = authorFirstName
+                },
+                Editor = editor,
+                Format = (FormatEnum)format
+            };
+             bookService.AddBook(book);
+            
+        }
+        [DataTestMethod]
+        [DataRow("1234567890", "Le seigneur des anneaux", "Tolkien",  null, "Christian Bourgois", 0)]
+        [DataRow("1234-567890123", null, "Renoir", "Jean", "Flammarion", 1)]
+        public void ShouldBeAutoCompleted(string isbn, string title, string authorName, string authorFirstName, string editor, int format)
+        {
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new PostBook(fakeRepo);
+            var book = new IiaTdd.objet.PostBookObj()
+            {
+                Isbn = isbn,
+                Title = title,
+                Author = new Author
+                {
+                    Name = authorName,
+                    FirstName = authorFirstName
+                },
+                Editor = editor,
+                Format = (FormatEnum)format
+            };
+            bookService.AddBook(book);
         }
         
         

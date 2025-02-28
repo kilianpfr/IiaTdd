@@ -7,7 +7,7 @@
         GrandFormat 
     }
 
-    public class PostBook
+    public class PostBookObj
     {
         public string? Isbn { get; set; }
         public string? Title { get; set; }
