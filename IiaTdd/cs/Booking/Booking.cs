@@ -1,12 +1,13 @@
 using IiaTdd.cs.Interface;
+using IiaTdd.objet;
 
 namespace IiaTdd.cs.Booking;
 
-public class PostBooking : IMemberRepository
+public class Booking : IMemberRepository
 {
     private readonly IMemberRepository _repository;
     
-    public PostBooking(IMemberRepository repository)
+    public Booking(IMemberRepository repository)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
@@ -22,5 +23,10 @@ public class PostBooking : IMemberRepository
     public void StopBookingBook(int idBook, int idMember)
     {
         _repository.StopBookingBook(idBook, idMember);
+    }
+
+    public List<GetBookObj> GetHistoryAuthor(int idMember)
+    {
+        return _repository.GetHistoryAuthor(idMember);
     }
 }

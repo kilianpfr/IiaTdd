@@ -376,7 +376,7 @@ namespace IiaTddTest
         public void BookingBook_ShouldSuccess(int idBook, int idMemeber, int numberMonth, bool getMail)
         {
             IMemberRepository fakeRepo = new FakeMemberRepository();
-            var bookService = new PostBooking(fakeRepo);
+            var bookService = new Booking(fakeRepo);
             bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
 
         }
@@ -388,7 +388,7 @@ namespace IiaTddTest
         public void BookingBook_ShouldThrowException_WhenBookOrMemberNotFound(int idBook, int idMemeber, int numberMonth, bool getMail)
         {
             IMemberRepository fakeRepo = new FakeMemberRepository();
-            var bookService = new PostBooking(fakeRepo);
+            var bookService = new Booking(fakeRepo);
             bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
         }
         [DataTestMethod]
@@ -399,7 +399,7 @@ namespace IiaTddTest
         public void BookingBook_OutsideOfMaxMonth(int idBook, int idMemeber, int numberMonth, bool getMail)
         {
             IMemberRepository fakeRepo = new FakeMemberRepository();
-            var bookService = new PostBooking(fakeRepo);
+            var bookService = new Booking(fakeRepo);
             bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
          
         }
@@ -409,7 +409,7 @@ namespace IiaTddTest
         public void BookingBook_ShouldThrowException_WhenMemberHasAlreadyReservedThreeBooks(int idBook1,int idmember, int mois, bool mail, int book2 , int mois2, bool mail2, int book3, int mois3, bool mail3, int book4, int mois4, bool mail4)
         {
             IMemberRepository fakeRepo = new FakeMemberRepository();
-            var bookService = new PostBooking(fakeRepo);
+            var bookService = new Booking(fakeRepo);
             bookService.BookingBook(idBook1, idmember, mois, mail);
             bookService.BookingBook(book2, idmember, mois2, mail2);
             bookService.BookingBook(book3, idmember, mois3, mail3);
@@ -420,7 +420,7 @@ namespace IiaTddTest
         public void StopBookingBook_ShouldSuccess(int idBook, int idMemeber, int numberMonth, bool getMail)
         {
             IMemberRepository fakeRepo = new FakeMemberRepository();
-            var bookService = new PostBooking(fakeRepo);
+            var bookService = new Booking(fakeRepo);
             bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
             bookService.StopBookingBook(idBook, idMemeber);
         }
@@ -430,10 +430,30 @@ namespace IiaTddTest
         public void StopBookingBook_ShouldFail(int idBook, int idMemeber, int numberMonth, bool getMail)
         {
             IMemberRepository fakeRepo = new FakeMemberRepository();
-            var bookService = new PostBooking(fakeRepo);
+            var bookService = new Booking(fakeRepo);
            
             bookService.StopBookingBook(idBook, idMemeber);
         }
+        [DataTestMethod]
+        [DataRow(1,1,2,false)]
+        public void GettingHistory_ShouldSuccess(int idBook, int idMemeber, int numberMonth, bool getMail)
+        {
+            IMemberRepository fakeRepo = new FakeMemberRepository();
+            var bookService = new Booking(fakeRepo);
+            bookService.BookingBook(idBook, idMemeber, numberMonth, getMail);
+            bookService.StopBookingBook(idBook, idMemeber);
+            bookService.GetHistoryAuthor(idMemeber);
+        }
+        [DataTestMethod]
+        [DataRow(1,1,2,false)]
+        [ExpectedException(typeof(Exception), "Livre ou membre non trouvé")]
+        public void GettingHistory_ShouldFail(int idBook, int idMemeber, int numberMonth, bool getMail)
+        {
+            IMemberRepository fakeRepo = new FakeMemberRepository();
+            var bookService = new Booking(fakeRepo);
+            bookService.GetHistoryAuthor(idMemeber);
+        }
+        
     
         
         

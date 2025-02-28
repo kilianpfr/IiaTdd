@@ -37,6 +37,8 @@ public class FakeMemberRepository : IMemberRepository
 
     private List<GetLink> _links = new();
     
+    private List<GetLink> _history = new();
+    
 
 
     public void BookingBook(int idBook, int idMember, int numberMonth, bool getmail)
@@ -71,7 +73,16 @@ public class FakeMemberRepository : IMemberRepository
         {
             throw new Exception("Livre ou membre non trouvé");
         }
+        _history.Add(link);
        
         _links.Remove(link);
+    }
+
+    public List<GetBookObj> GetHistoryAuthor(int member)
+    {
+        List<int> idBooks = _history.Where(x => x.IdMember == member).Select(x => x.IdBook).ToList();
+        var fakebook = new FakeBookRepository();
+        List<GetBookObj> books = fakebook.GetBooks();
+        return books.Where(x => idBooks.Contains(x.Id)).ToList();
     }
 }
