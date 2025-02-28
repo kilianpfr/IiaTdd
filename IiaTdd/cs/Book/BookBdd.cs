@@ -13,7 +13,7 @@ public class BookBdd : IBookRepository
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
 
-    public objet.PostBookObj GetBookByIsbn(string isbn)
+    public objet.PostBookObj GetBookByIsbnForPost(string isbn)
     {
         string connectionString = _configuration.GetConnectionString("DefaultConnection");
         using MySqlConnection connection = new(connectionString);
@@ -83,7 +83,7 @@ public class BookBdd : IBookRepository
         //si il manque un champ on essaie l'autocompletion
         if (bookObj.Isbn == null || bookObj.Title == null || bookObj.Author == null || bookObj.Editor == null || bookObj.Format == 0)
         {
-            if (bookObj.Isbn != null) bookObj = GetBookByIsbn(bookObj.Isbn);
+            if (bookObj.Isbn != null) bookObj = GetBookByIsbnForPost(bookObj.Isbn);
         }
         
         string connectionString = _configuration.GetConnectionString("DefaultConnection");

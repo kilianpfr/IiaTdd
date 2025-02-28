@@ -28,18 +28,27 @@ public class PostBook
             CheckIsbnValide.CheckIsbnThirteen(isbn);
 
        
-        return _repository.GetBookByIsbn(isbn);
+        return _repository.GetBookByIsbnForPost(isbn);
     }
     public void AddBook(PostBookObj bookObj)
     {
+        if(bookObj.Isbn == null)
+            throw new Exception("Isbn invalide");
+        
         //aucun des champs ne doit être null
-        if (bookObj.Isbn == null || bookObj.Title == null || bookObj.Author == null || bookObj.Editor == null || bookObj.Format == 0)
+        if (bookObj.Title == null || bookObj.Author == null || bookObj.Editor == null || bookObj.Format == 0)
         {
-            throw new ArgumentNullException();
+            
+            //on vérifie si l'isbn est valide
+            CheckIsbn.TenOrThirteen(bookObj.Isbn);
+            if (bookObj.Isbn.Length == 10)
+                CheckIsbnValide.CheckIsbnTen(bookObj.Isbn);
+            else
+                CheckIsbnValide.CheckIsbnThirteen(bookObj.Isbn);
+            
+            bookObj = AutoComplete(bookObj.Isbn);
         }
-        //si l'isbn n'est pas valide
-        if (bookObj.Isbn == null || (!CheckIsbnValide.CheckIsbnTen(bookObj.Isbn) &&
-                                  !CheckIsbnValide.CheckIsbnThirteen(bookObj.Isbn))) throw new ArgumentNullException("Isbn invalide");
+
         //si l'auteur n'est pas valide
         CheckAuthor.CheckAuthorName(bookObj.Author);
         //si le format n'est pas valide

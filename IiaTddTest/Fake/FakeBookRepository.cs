@@ -42,7 +42,7 @@ public class FakeBookRepository : IBookRepository
         }
             
     };
-    public PostBookObj GetBookByIsbn(string isbn)
+    public PostBookObj GetBookByIsbnForPost(string isbn)
     {
         
         PostBookObj? book;
@@ -89,9 +89,6 @@ public class FakeBookRepository : IBookRepository
     {
         try
         {
-            
-          
-            
             var bookToUpdate = _books.FirstOrDefault(x => x.Id == id);
             if (bookToUpdate == null)
             {
@@ -111,16 +108,6 @@ public class FakeBookRepository : IBookRepository
 
     public void AddBook(PostBookObj bookObj)
     {
-        //on verifie si le livre est complet
-        if (bookObj.Isbn == null || bookObj.Title == null || bookObj.Author == null || bookObj.Editor == null || bookObj.Format == 0)
-        {
-            
-        }else if (_books.Any(x => x.Isbn == bookObj.Isbn))
-        {
-            throw new Exception("Le livre existe déjà");
-        }
-        else
-        {
             _books.Add(new GetBookObj()
             {
                 Id = _books.Count + 1,
@@ -130,6 +117,6 @@ public class FakeBookRepository : IBookRepository
                 Editor = bookObj.Editor,
                 Format = bookObj.Format
             });
-        }
     }
+    
 }

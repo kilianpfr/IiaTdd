@@ -254,7 +254,7 @@ namespace IiaTddTest
         {
             IBookRepository fakeRepo = new FakeBookRepository();
             var bookService = new PostBook(fakeRepo);
-            var book = new IiaTdd.objet.PostBookObj()
+            var book = new PostBookObj()
             {
                 Isbn = isbn,
                 Title = title,
@@ -271,12 +271,12 @@ namespace IiaTddTest
         }
         [DataTestMethod]
         [DataRow("1234567890", "Le seigneur des anneaux", "Tolkien",  null, "Christian Bourgois", 0)]
-        [DataRow("1234-567890123", null, "Renoir", "Jean", "Flammarion", 1)]
+        [DataRow("9783135792468", null, "Renoir", "Jean", "Flammarion", 1)]
         public void ShouldBeAutoCompleted(string isbn, string title, string authorName, string authorFirstName, string editor, int format)
         {
             IBookRepository fakeRepo = new FakeBookRepository();
             var bookService = new PostBook(fakeRepo);
-            var book = new IiaTdd.objet.PostBookObj()
+            var book = new PostBookObj()
             {
                 Isbn = isbn,
                 Title = title,
@@ -290,6 +290,46 @@ namespace IiaTddTest
             };
             bookService.AddBook(book);
         }
+        [DataTestMethod]
+        [DataRow(null, "Le seigneur des anneaux", "Tolkien",  null, "Christian Bourgois", 0)]
+        [ExpectedException(typeof(Exception), "Isbn invalide")]
+        public void PostBook_ShouldThrowException_WhenIsbnIsInvalid(string isbn, string title, string authorName, string authorFirstName, string editor, int format)
+        {
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new PostBook(fakeRepo);
+            var book = new PostBookObj()
+            {
+                Isbn = isbn,
+                Title = title,
+                Author = new Author
+                {
+                    Name = authorName,
+                    FirstName = authorFirstName
+                },
+                Editor = editor,
+                Format = (FormatEnum)format
+            };
+            bookService.AddBook(book);
+        }
+        
+        [DataTestMethod]
+        [DataRow("Tolkien", "J.R.R")]
+        [DataRow("Renoir", "Jean")]
+        [DataRow("Curie", "Marie")]
+        public void GetBookByAuthor_ShouldReturnBook(string name, string firstName)
+        {
+            IBookRepository fakeRepo = new FakeBookRepository();
+            var bookService = new PostBook(fakeRepo);
+            var author = new Author()
+            {
+                Name = name,
+                FirstName = firstName
+            };
+            var result = bookService.GetBookByAuthor(author);
+            Assert.IsNotNull(result);
+        }
+        
+        
         
         
         

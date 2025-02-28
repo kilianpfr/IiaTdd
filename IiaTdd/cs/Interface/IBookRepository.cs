@@ -4,7 +4,7 @@ namespace IiaTdd.cs.Interface;
 
 public interface IBookRepository
 {
-    objet.PostBookObj GetBookByIsbn(string isbn);
+    objet.PostBookObj GetBookByIsbnForPost(string isbn);
     bool DeleteBookById(int id);
 
 
