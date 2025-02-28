@@ -29,4 +29,9 @@ public class Booking : IMemberRepository
     {
         return _repository.GetHistoryAuthor(idMember);
     }
+
+    public List<GetLink> GetLinks()
+    {
+        return _repository.GetLinks();
+    }
 }

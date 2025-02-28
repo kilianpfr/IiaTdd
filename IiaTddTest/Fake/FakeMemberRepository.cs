@@ -83,6 +83,24 @@ public class FakeMemberRepository : IMemberRepository
         List<int> idBooks = _history.Where(x => x.IdMember == member).Select(x => x.IdBook).ToList();
         var fakebook = new FakeBookRepository();
         List<GetBookObj> books = fakebook.GetBooks();
-        return books.Where(x => idBooks.Contains(x.Id)).ToList();
+        List<GetBookObj> booksHistory = new();
+        foreach (var idBook in idBooks)
+        {
+            var book = books.Find(x => x.Id == idBook);
+            if (book != null)
+            {
+                booksHistory.Add(book);
+            }
+        }
+        if (booksHistory == null || booksHistory.Count == 0)
+        {
+            throw new Exception("Livre ou membre non trouvé");
+        }
+        return booksHistory;
+    }
+    
+    public List<GetLink> GetLinks()
+    {
+        return _links;
     }
 }

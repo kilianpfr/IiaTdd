@@ -453,6 +453,15 @@ namespace IiaTddTest
             var bookService = new Booking(fakeRepo);
             bookService.GetHistoryAuthor(idMemeber);
         }
+        [TestMethod]
+        public void GetAllBookings_ShouldReturnAllBookings()
+        {
+            IMemberRepository fakeRepo = new FakeMemberRepository();
+            var bookService = new Booking(fakeRepo);
+            bookService.BookingBook(1, 1, 1, false);
+            var result = bookService.GetLinks();
+            Assert.IsNotNull(result);
+        }
         
     
         
