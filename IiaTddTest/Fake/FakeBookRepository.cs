@@ -157,4 +157,8 @@ public class FakeBookRepository : IBookRepository
             throw new Exception("Aucun livre trouvé");
         }
     }
+    public List<GetBookObj> GetBooks()
+    {
+        return _books;
+    }
 }

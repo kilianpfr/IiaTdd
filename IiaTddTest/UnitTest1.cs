@@ -383,7 +383,7 @@ namespace IiaTddTest
         
         [DataTestMethod]
         [DataRow(4,1,2,false)]
-        [ExpectedException(typeof(Exception), "Aucun livre trouvé")]
+        [ExpectedException(typeof(Exception), "Livre ou membre non trouvé")]
         public void BookingBook_ShouldThrowException_WhenBookNotFound(int idBook, int idMemeber, int numberMonth, bool getMail)
         {
             IMemberRepository fakeRepo = new FakeMemberRepository();

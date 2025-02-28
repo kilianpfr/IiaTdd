@@ -1,3 +1,4 @@
+using IiaTdd.cs.Book;
 using IiaTdd.cs.Interface;
 using IiaTdd.objet;
 
@@ -5,13 +6,7 @@ namespace IiaTddTest.Fake;
 
 public class FakeMemberRepository : IMemberRepository
 {
-    /*
-     *   public string? IdMember { get; set; }
-    public string? Name { get; set; }
-    public string? FirstName { get; set; }
-    public string? BirthDate { get; set; }
-    public string? Civility { get; set; }
-     */
+ 
     public List<Member> _members = new List<Member>()
     {
         new Member()
@@ -46,7 +41,14 @@ public class FakeMemberRepository : IMemberRepository
 
     public void BookingBook(int idBook, int idMember, int numberMonth, bool getmail)
     {
-     
+        var fakebook = new FakeBookRepository();
+        List<GetBookObj> books = fakebook.GetBooks();
+        var book = books.Find(x => x.Id == idBook);
+        var member = _members.Find(x => x.IdMember == idMember.ToString());
+        if (book == null || member == null)
+        {
+            throw new Exception("Livre ou membre non trouvé");
+        }
         _links.Add(new GetLink()
         {
             Id = _links.Count + 1,
@@ -55,5 +57,7 @@ public class FakeMemberRepository : IMemberRepository
             Numbermonth = numberMonth,
             Getmail = getmail
         });
+        
+        
     }
 }
